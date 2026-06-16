@@ -20,6 +20,9 @@ defineEmits(['logout'])
     </div>
 
     <div class="header__actions">
+      <RouterLink class="header__link" :to="{ name: 'molds' }">
+        {{ fa.molds.header.title }}
+      </RouterLink>
       <div v-if="currentUser" class="header__user">
         <span class="header__user-label">{{ fa.header.loggedInAs }}</span>
         <span class="header__user-name" dir="ltr">{{ currentUser }}</span>
@@ -127,6 +130,16 @@ defineEmits(['logout'])
   background: var(--surface);
   cursor: pointer;
   transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.header__link {
+  text-decoration: none;
+}
+
+.header__link:hover {
+  color: var(--accent);
+  border-color: var(--accent-border);
+  background: var(--accent-bg);
 }
 
 .header__logout:hover {
