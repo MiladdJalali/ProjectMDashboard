@@ -7,54 +7,30 @@ defineProps({
 })
 
 defineEmits(['edit', 'delete'])
-
-function initials(username) {
-  if (!username) return '?'
-  return username.slice(0, 2).toUpperCase()
-}
 </script>
 
 <template>
-  <div class="table-wrap">
-    <table class="table">
+  <div class="table-container">
+    <table class="data-table">
       <thead>
         <tr>
-          <th>{{ fa.table.username }}</th>
-          <th>{{ fa.table.address }}</th>
-          <th>{{ fa.table.description }}</th>
-          <th>{{ fa.table.created }}</th>
-          <th class="table__actions-col">{{ fa.table.actions }}</th>
+          <th>{{ fa?.table?.username || 'نام کاربری' }}</th>
+          <th>{{ fa?.table?.address || 'آدرس' }}</th>
+          <th>{{ fa?.table?.description || 'توضیحات' }}</th>
+          <th>{{ fa?.table?.created || 'تاریخ ایجاد' }}</th>
+          <th class="actions-col">{{ fa?.table?.actions || 'عملیات' }}</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="user in users" :key="user.id" class="table__row">
+        <tr v-for="user in users" :key="user.id" class="table-row">
+          <td><span class="user-name">{{ user.username }}</span></td>
+          <td>{{ user.address || '—' }}</td>
+          <td class="description">{{ user.description || '—' }}</td>
+          <td class="date">{{ formatDate(user.created) }}</td>
           <td>
-            <div class="user-cell">
-              <span class="user-cell__avatar" aria-hidden="true">{{ initials(user.username) }}</span>
-              <span class="user-cell__name" dir="ltr">{{ user.username }}</span>
-            </div>
-          </td>
-          <td>{{ user.address || fa.table.empty }}</td>
-          <td class="table__desc">{{ user.description || fa.table.empty }}</td>
-          <td class="table__date">{{ formatDate(user.created) }}</td>
-          <td>
-            <div class="table__actions">
-              <button
-                type="button"
-                class="action action--edit"
-                :aria-label="fa.table.editAria"
-                @click="$emit('edit', user)"
-              >
-                {{ fa.table.edit }}
-              </button>
-              <button
-                type="button"
-                class="action action--delete"
-                :aria-label="fa.table.deleteAria"
-                @click="$emit('delete', user)"
-              >
-                {{ fa.table.delete }}
-              </button>
+            <div class="actions">
+              <button class="action-btn edit-btn" @click="$emit('edit', user)">✏️ ویرایش</button>
+              <button class="action-btn delete-btn" @click="$emit('delete', user)">🗑️ حذف</button>
             </div>
           </td>
         </tr>
@@ -64,118 +40,73 @@ function initials(username) {
 </template>
 
 <style scoped>
-.table-wrap {
-  overflow-x: auto;
+.table-container {
+  width: 100%;
+  background: #1e2937;
+  overflow: hidden;
 }
 
-.table {
+.data-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.9375rem;
 }
 
-.table th {
+.data-table th {
+  background: #253549;
+  padding: 1.25rem 1.5rem;
   text-align: right;
-  padding: 0.75rem 1.5rem;
-  font-size: 0.8125rem;
+  color: #94a3b8;
   font-weight: 600;
-  color: var(--text-muted);
-  background: var(--bg);
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
+}
+
+.data-table td {
+  padding: 1.3rem 1.5rem;
+  border-bottom: 1px solid #334155;
+  color: #e2e8f0;
+}
+
+.table-row:hover {
+  background: #27344f;
+}
+
+.user-name {
+  font-weight: 600;
+}
+
+.description {
+  max-width: 380px;
   white-space: nowrap;
-}
-
-.table td {
-  padding: 0.85rem 1.5rem;
-  border-bottom: 1px solid var(--border);
-  vertical-align: middle;
-  text-align: right;
-}
-
-.table__row:hover td {
-  background: var(--surface-hover);
-}
-
-.table__desc {
-  max-width: 200px;
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
-  color: var(--text-muted);
 }
 
-.table__date {
-  color: var(--text-muted);
-  white-space: nowrap;
-  font-size: 0.8125rem;
-}
-
-.table__actions-col {
-  width: 1%;
-  white-space: nowrap;
-}
-
-.user-cell {
+.actions {
   display: flex;
-  align-items: center;
-  gap: 0.75rem;
+  gap: 10px;
 }
 
-.user-cell__avatar {
-  flex-shrink: 0;
-  width: 2.25rem;
-  height: 2.25rem;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: var(--accent);
-  background: var(--accent-bg);
-  border: 1px solid var(--accent-border);
-}
-
-.user-cell__name {
-  font-weight: 600;
-  color: var(--text-h);
-}
-
-.table__actions {
-  display: flex;
-  gap: 0.35rem;
-}
-
-.action {
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  padding: 0.35rem 0.65rem;
-  font: inherit;
-  font-size: 0.8125rem;
-  font-weight: 500;
+.action-btn {
+  padding: 0.55rem 1.1rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
   cursor: pointer;
-  background: var(--surface);
-  transition: background 0.15s, border-color 0.15s, color 0.15s;
+  border: none;
+  color: white;
 }
 
-.action--edit:hover {
-  border-color: var(--accent-border);
-  color: var(--accent);
-  background: var(--accent-bg);
+.edit-btn {
+  background: #475569;
 }
 
-.action--delete:hover {
-  border-color: rgba(239, 68, 68, 0.4);
-  color: #ef4444;
-  background: rgba(239, 68, 68, 0.08);
+.edit-btn:hover {
+  background: #64748b;
 }
 
-@media (max-width: 768px) {
-  .table th:nth-child(3),
-  .table td:nth-child(3),
-  .table th:nth-child(4),
-  .table td:nth-child(4) {
-    display: none;
-  }
+.delete-btn {
+  background: #991b1b;
+}
+
+.delete-btn:hover {
+  background: #b91c1c;
 }
 </style>

@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue'
-import { fa } from '../locales/fa'
+import { fa } from '../locales/fa'   // مطمئن شو این مسیر درست باشه
 
 const search = defineModel({ type: String, default: '' })
 const emit = defineEmits(['add'])
@@ -13,18 +13,18 @@ defineExpose({ focusSearch: () => inputRef.value?.focus() })
 <template>
   <div class="toolbar">
     <div class="toolbar__search">
-      <span class="toolbar__search-icon" aria-hidden="true">⌕</span>
+      <span class="toolbar__search-icon" aria-hidden="true">🔍</span>
       <input
         ref="inputRef"
         v-model="search"
         type="search"
         class="toolbar__input"
-        :placeholder="fa.toolbar.searchPlaceholder"
-        :aria-label="fa.toolbar.searchAria"
+        :placeholder="fa?.toolbar?.searchPlaceholder || 'جستجو...'"
+        :aria-label="fa?.toolbar?.searchAria || 'جستجو'"
       />
     </div>
     <button type="button" class="toolbar__add" @click="emit('add')">
-      {{ fa.toolbar.addUser }}
+      {{ fa?.toolbar?.addUser || 'افزودن کاربر جدید' }}
     </button>
   </div>
 </template>
@@ -34,8 +34,10 @@ defineExpose({ focusSearch: () => inputRef.value?.focus() })
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  padding: 1rem 1.5rem;
-  flex-wrap: wrap;
+  padding: 1.25rem 1.5rem;
+  background: #1e2937;
+  border-radius: 12px 12px 0 0;
+  border-bottom: 1px solid #334155;
 }
 
 .toolbar__search {
@@ -44,20 +46,14 @@ defineExpose({ focusSearch: () => inputRef.value?.focus() })
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
+  background: #253549;
+  border: 1px solid #475569;
+  border-radius: 12px;
   padding: 0 0.85rem;
-  transition: border-color 0.2s, box-shadow 0.2s;
-}
-
-.toolbar__search:focus-within {
-  border-color: var(--accent-border);
-  box-shadow: 0 0 0 3px var(--accent-bg);
 }
 
 .toolbar__search-icon {
-  color: var(--text-muted);
+  color: #94a3b8;
   font-size: 1.1rem;
 }
 
@@ -66,37 +62,26 @@ defineExpose({ focusSearch: () => inputRef.value?.focus() })
   border: none;
   background: transparent;
   font: inherit;
-  font-size: 0.9375rem;
-  color: var(--text-h);
-  padding: 0.6rem 0;
+  font-size: 0.95rem;
+  color: #e2e8f0;
+  padding: 0.65rem 0;
   outline: none;
-  min-width: 0;
-  text-align: right;
-}
-
-.toolbar__input::placeholder {
-  color: var(--text-muted);
 }
 
 .toolbar__add {
-  border: none;
-  border-radius: var(--radius-md);
-  padding: 0.65rem 1.1rem;
-  font: inherit;
-  font-size: 0.875rem;
+  background: #3b82f6;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 12px;
   font-weight: 600;
-  color: #fff;
-  background: var(--accent);
-  cursor: pointer;
   white-space: nowrap;
-  transition: opacity 0.2s, transform 0.15s;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
 }
 
 .toolbar__add:hover {
-  opacity: 0.92;
-}
-
-.toolbar__add:active {
-  transform: scale(0.97);
+  background: #2563eb;
+  transform: translateY(-1px);
 }
 </style>

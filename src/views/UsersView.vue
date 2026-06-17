@@ -1,11 +1,11 @@
 <script setup>
-import { ref, computed, onMounted, watch } from 'vue' // computed و watch اضافه شدند
+import { ref, computed, onMounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import AppHeader from '../components/AppHeader.vue'
 import UserToolbar from '../components/UserToolbar.vue'
 import UserTable from '../components/UserTable.vue'
 import UserFormModal from '../components/UserFormModal.vue'
-import Pagination from '../components/Pagination.vue' // کامپوننت صفحه‌بندی اضافه شد
+import Pagination from '../components/Pagination.vue'
 import { useUsers } from '../composables/useUsers'
 import { useAuth } from '../composables/useAuth'
 import { fa } from '../locales/fa'
@@ -34,19 +34,16 @@ const deleteError = ref('')
 const currentPage = ref(1)
 const itemsPerPage = ref(5) // تعداد آیتم‌ها در هر صفحه (می‌توانید تغییر دهید)
 
-// منطق محاسبه صفحات
 const totalPages = computed(() => {
   return Math.ceil(filteredUsers.value.length / itemsPerPage.value)
 })
 
-// کاربرانی که باید در صفحه فعلی نمایش داده شوند
 const paginatedUsers = computed(() => {
   const start = (currentPage.value - 1) * itemsPerPage.value
   const end = start + itemsPerPage.value
   return filteredUsers.value.slice(start, end)
 })
 
-// وقتی کاربر چیزی را جستجو می‌کند، باید به صفحه اول برگردیم
 watch(search, () => {
   currentPage.value = 1
 })
@@ -142,7 +139,6 @@ function handleLogout() {
         </button>
       </div>
 
-      <!-- به جای filteredUsers، حالا paginatedUsers را می‌دهیم -->
       <UserTable
         v-else-if="filteredUsers.length"
         :users="paginatedUsers"
@@ -213,7 +209,6 @@ function handleLogout() {
 </template>
 
 <style scoped>
-/* استایل‌های شما کاملاً دست‌نخورده باقی ماند */
 .app {
   position: relative;
   min-height: 100svh;
@@ -237,7 +232,7 @@ function handleLogout() {
 
 .app__card {
   width: 100%;
-  max-width: 900px;
+  max-width: 1200px;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-xl);

@@ -1,10 +1,14 @@
 <template>
   <aside class="sidebar">
+    <!-- Header -->
     <div class="sidebar__header">
-      <span class="sidebar__logo">⚡</span>
-      <h2 class="sidebar__title">پنل مدیریت</h2>
+      <div class="logo-container">
+        <span class="sidebar__logo">⚡</span>
+        <h2 class="sidebar__title">پنل مدیریت</h2>
+      </div>
     </div>
-    
+
+    <!-- Navigation -->
     <nav class="sidebar__nav">
       <ul>
         <li>
@@ -28,10 +32,21 @@
       </ul>
     </nav>
 
-    <div class="sidebar-footer">      
+    <!-- User Section - Improved -->
+    <div class="sidebar-footer">
+      <div class="user-section">
+        <div class="user-avatar">
+          👤
+        </div>
+        <div class="user-info">
+          <span class="user-name">{{ user?.name || 'admin' }}</span>
+          <span class="user-role">مدیر سیستم</span>
+        </div>
+      </div>
+
       <button @click="handleLogout" class="logout-btn">
-        <span>🚪</span>
-        خروج
+        <span class="logout-icon">🚪</span>
+        خروج از حساب
       </button>
     </div>
   </aside>
@@ -52,39 +67,47 @@ const handleLogout = async () => {
 
 <style scoped>
 .sidebar {
-  width: 260px;
+  width: 280px;
   height: 100vh;
-  background-color: var(--surface);
-  border-left: 1px solid var(--border);
+  background: #1e2937;
+  border-left: 1px solid #334155;
   display: flex;
   flex-direction: column;
-  position: sticky;
-  top: 0;
+  color: #e2e8f0;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.4);
   flex-shrink: 0;
 }
 
+/* Header */
 .sidebar__header {
+  padding: 1.8rem 1.25rem;
+  border-bottom: 1px solid #334155;
+}
+
+.logo-container {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  padding: 1.75rem 1.5rem;
-  border-bottom: 1px solid var(--border);
+  gap: 12px;
 }
 
 .sidebar__logo {
-  font-size: 1.5rem;
+  font-size: 1.8rem;
+  background: linear-gradient(135deg, #60a5fa, #3b82f6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .sidebar__title {
   margin: 0;
-  font-size: 1.125rem;
+  font-size: 1.3rem;
   font-weight: 700;
-  color: var(--text-h);
+  color: white;
 }
 
+/* Navigation */
 .sidebar__nav {
-  padding: 1rem;
   flex: 1;
+  padding: 1.25rem 0.75rem;
 }
 
 .sidebar__nav ul {
@@ -93,80 +116,108 @@ const handleLogout = async () => {
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: 6px;
 }
 
 .sidebar__link {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  padding: 0.75rem 1rem;
+  gap: 14px;
+  padding: 0.85rem 1.1rem;
   text-decoration: none;
-  color: var(--text-muted);
-  border-radius: var(--radius-md);
-  font-size: 0.9375rem;
-  font-weight: 500;
-  transition: background 0.2s, color 0.2s;
+  color: #cbd5e1;
+  border-radius: 10px;
+  font-size: 0.96rem;
+  transition: all 0.2s ease;
 }
 
 .sidebar__link:hover {
-  background: var(--surface-hover);
-  color: var(--text-h);
+  background: #334155;
+  color: white;
+  transform: translateX(-4px);
 }
 
 .sidebar__link.active {
-  background: var(--accent-bg);
-  color: var(--accent);
-  font-weight: 600;
+  background: #3b82f6;
+  color: white;
+  box-shadow: 0 4px 8px -2px rgba(59, 130, 246, 0.4);
 }
 
 .sidebar__icon {
-  font-size: 1.1rem;
-  width: 1.5rem;
-  text-align: center;
+  font-size: 1.3rem;
+  width: 26px;
 }
 
-/* Footer Styles */
+/* User Section - Improved */
 .sidebar-footer {
-  margin-top: auto;
-  padding: 1.5rem 1rem;
-  border-top: 1px solid var(--border);
+  padding: 1.25rem;
+  background: #1a2330;
+  border-top: 1px solid #334155;
+}
+
+.user-section {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid #334155;
+}
+
+.user-avatar {
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, #475569, #64748b);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  flex-shrink: 0;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 }
 
 .user-info {
-  margin-bottom: 1rem;
-  text-align: center;
+  flex: 1;
 }
 
 .user-name {
   display: block;
   font-weight: 600;
-  color: var(--text-h);
+  color: #f1f5f9;
+  font-size: 1rem;
 }
 
 .user-role {
-  font-size: 0.85rem;
-  color: var(--text-muted);
+  font-size: 0.82rem;
+  color: #94a3b8;
 }
 
+/* Logout Button */
 .logout-btn {
   width: 100%;
-  padding: 0.75rem;
-  background: rgba(239, 68, 68, 0.15);
-  color: #f87171;
-  border: 1px solid rgba(239, 68, 68, 0.3);
-  border-radius: 8px;
+  padding: 0.85rem;
+  background: #b91c1c;
+  color: #fecaca;
+  border: none;
+  border-radius: 10px;
   font-weight: 500;
   cursor: pointer;
-  transition: all 0.2s;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 10px;
+  transition: all 0.25s ease;
+  font-size: 0.95rem;
 }
 
 .logout-btn:hover {
-  background: rgba(239, 68, 68, 0.25);
-  color: #ef4444;
+  background: #991b1b;
+  color: white;
+  transform: translateY(-2px);
+}
+
+.logout-icon {
+  font-size: 1.15rem;
 }
 </style>

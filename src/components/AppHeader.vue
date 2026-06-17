@@ -18,12 +18,6 @@ defineProps({
       </div>
     </div>
 
-    <div class="header__actions">
-      <div v-if="currentUser" class="header__user">
-        <span class="header__user-label">{{ fa.header.loggedInAs }}</span>
-        <span class="header__user-name" dir="ltr">{{ currentUser }}</span>
-      </div>
-    </div>
   </header>
 </template>
 
