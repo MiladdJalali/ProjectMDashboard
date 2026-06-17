@@ -1,10 +1,11 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue' // computed و watch اضافه شدند
 import { useRouter } from 'vue-router'
 import AppHeader from '../components/AppHeader.vue'
 import UserToolbar from '../components/UserToolbar.vue'
 import UserTable from '../components/UserTable.vue'
 import UserFormModal from '../components/UserFormModal.vue'
+import Pagination from '../components/Pagination.vue' // کامپوننت صفحه‌بندی اضافه شد
 import { useUsers } from '../composables/useUsers'
 import { useAuth } from '../composables/useAuth'
 import { fa } from '../locales/fa'
@@ -28,6 +29,28 @@ const editingUser = ref(null)
 const formError = ref('')
 const deleteTarget = ref(null)
 const deleteError = ref('')
+
+// --- متغیرهای صفحه‌بندی ---
+const currentPage = ref(1)
+const itemsPerPage = ref(5) // تعداد آیتم‌ها در هر صفحه (می‌توانید تغییر دهید)
+
+// منطق محاسبه صفحات
+const totalPages = computed(() => {
+  return Math.ceil(filteredUsers.value.length / itemsPerPage.value)
+})
+
+// کاربرانی که باید در صفحه فعلی نمایش داده شوند
+const paginatedUsers = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage.value
+  const end = start + itemsPerPage.value
+  return filteredUsers.value.slice(start, end)
+})
+
+// وقتی کاربر چیزی را جستجو می‌کند، باید به صفحه اول برگردیم
+watch(search, () => {
+  currentPage.value = 1
+})
+// ----------------------------
 
 onMounted(async () => {
   try {
@@ -119,14 +142,28 @@ function handleLogout() {
         </button>
       </div>
 
+      <!-- به جای filteredUsers، حالا paginatedUsers را می‌دهیم -->
       <UserTable
         v-else-if="filteredUsers.length"
-        :users="filteredUsers"
+        :users="paginatedUsers"
         @edit="openEdit"
         @delete="confirmDelete"
       />
 
-      <div v-else class="app__empty">
+      <div v-if="!loading && !error && filteredUsers.length" class="table-footer">
+        <div class="table-footer__info">
+          مجموع کاربران: <strong>{{ userCount }}</strong> نفر
+        </div>
+
+        <Pagination
+          v-if="filteredUsers.length > itemsPerPage"
+          :current-page="currentPage"
+          :total-pages="totalPages"
+          @page-changed="currentPage = $event"
+        />
+      </div>
+
+      <div v-else-if="!loading && !error && !filteredUsers.length" class="app__empty">
         <span class="app__empty-icon" aria-hidden="true">🔍</span>
         <p v-if="search">{{ fa.app.emptySearch }}</p>
         <p v-else>{{ fa.app.emptyList }}</p>
@@ -176,6 +213,7 @@ function handleLogout() {
 </template>
 
 <style scoped>
+/* استایل‌های شما کاملاً دست‌نخورده باقی ماند */
 .app {
   position: relative;
   min-height: 100svh;
@@ -328,4 +366,26 @@ function handleLogout() {
 .modal-leave-to {
   opacity: 0;
 }
+
+.table-footer {
+  display: flex;
+  justify-content: space-between; /* یکی راست، یکی چپ */
+  align-items: center;
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--border);
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.table-footer__info {
+  color: var(--text-muted);
+  font-size: 0.875rem;
+}
+
+.table-footer__info strong {
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 1rem;
+}
+
 </style>

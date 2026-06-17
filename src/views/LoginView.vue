@@ -46,180 +46,166 @@ async function submit() {
 
 <template>
   <div class="login-page">
-    <div class="login-page__bg" aria-hidden="true"></div>
+    <!-- LEFT: Image -->
+    <div class="login-page__illustration">
+      <img 
+        src="../assets/login-illustration.png" 
+        alt="Login Illustration"
+        class="illustration-image"
+      />
+    </div>
 
-    <main class="login-card">
-      <div class="login-card__header">
-        <span class="login-card__logo" aria-hidden="true">🔐</span>
-        <h1 class="login-card__title">{{ fa.login.title }}</h1>
-        <p class="login-card__subtitle">{{ fa.login.subtitle }}</p>
-      </div>
+    <!-- RIGHT: Login Form -->
+    <div class="login-page__form-side">
+      <main class="login-card">
+        <div class="login-card__header">
+          <span class="login-card__logo" aria-hidden="true">🔐</span>
+          <h1 class="login-card__title">{{ fa.login.title }}</h1>
+          <p class="login-card__subtitle">{{ fa.login.subtitle }}</p>
+        </div>
 
-      <form class="login-form" @submit.prevent="submit">
-        <p v-if="error" class="login-form__error" role="alert">{{ error }}</p>
+        <form class="login-form" @submit.prevent="submit">
+          <p v-if="error" class="login-form__error" role="alert">{{ error }}</p>
 
-        <label class="field">
-          <span class="field__label">{{ fa.login.username }}</span>
-          <input
-            v-model="username"
-            type="text"
-            class="field__input"
-            :placeholder="fa.login.usernamePlaceholder"
-            autocomplete="username"
-            :disabled="loading"
-            required
-          />
-        </label>
+          <label class="field">
+            <span class="field__label">{{ fa.login.username }}</span>
+            <input
+              v-model="username"
+              type="text"
+              class="field__input"
+              :placeholder="fa.login.usernamePlaceholder"
+              autocomplete="username"
+              :disabled="loading"
+              required
+            />
+          </label>
 
-        <label class="field">
-          <span class="field__label">{{ fa.login.password }}</span>
-          <input
-            v-model="password"
-            type="password"
-            class="field__input"
-            :placeholder="fa.login.passwordPlaceholder"
-            autocomplete="current-password"
-            dir="ltr"
-            :disabled="loading"
-            required
-          />
-        </label>
+          <label class="field">
+            <span class="field__label">{{ fa.login.password }}</span>
+            <input
+              v-model="password"
+              type="password"
+              class="field__input"
+              :placeholder="fa.login.passwordPlaceholder"
+              autocomplete="current-password"
+              dir="ltr"
+              :disabled="loading"
+              required
+            />
+          </label>
 
-        <button type="submit" class="login-form__submit" :disabled="loading">
-          {{ loading ? fa.login.submitting : fa.login.submit }}
-        </button>
-      </form>
-    </main>
+          <button type="submit" class="login-form__submit" :disabled="loading">
+            {{ loading ? fa.login.submitting : fa.login.submit }}
+          </button>
+        </form>
+      </main>
+    </div>
   </div>
 </template>
 
 <style scoped>
 .login-page {
-  position: relative;
-  min-height: 100svh;
-  display: grid;
-  place-items: center;
-  padding: 2rem 1rem;
+  display: flex;
+  min-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
+  background: #0f172a;
+  direction: ltr;
 }
 
-.login-page__bg {
-  position: fixed;
-  inset: 0;
-  background:
-    radial-gradient(ellipse 80% 60% at 50% -10%, var(--accent-bg) 0%, transparent 60%),
-    var(--bg);
-  z-index: -1;
+.login-page__illustration {
+  flex: 0 0 62%;
+  position: relative;
+  overflow: hidden;
+  background: #f1f5f9;
+}
+
+.illustration-image {
+  position: absolute;
+  inset: 0;                 /* top:0, right:0, bottom:0, left:0 */
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.login-page__form-side {
+  flex: 0 0 38%;            /* جمعاً 100% بشه */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+  background: #0f172a;
 }
 
 .login-card {
   width: 100%;
-  max-width: 400px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-lg);
+  max-width: 420px;
+  background: rgba(255, 255, 255, 0.98);
+  border-radius: 16px;
+  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.15);
   overflow: hidden;
 }
 
-.login-card__header {
-  text-align: center;
-  padding: 2rem 1.5rem 1rem;
-}
-
-.login-card__logo {
-  font-size: 2rem;
-  display: block;
-  margin-bottom: 0.75rem;
-}
-
-.login-card__title {
-  margin: 0;
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--text-h);
-}
-
-.login-card__subtitle {
-  margin: 0.35rem 0 0;
-  font-size: 0.875rem;
-  color: var(--text-muted);
-}
+/* بقیه استایل‌ها (فرم) بدون تغییر */
+.login-card__header { text-align: center; padding: 2.5rem 2rem 1.5rem; }
+.login-card__logo { font-size: 2.8rem; display: block; margin-bottom: 1rem; }
+.login-card__title { margin: 0 0 0.5rem; font-size: 1.65rem; font-weight: 700; color: #1e2937; }
+.login-card__subtitle { margin: 0; font-size: 0.95rem; color: #64748b; }
 
 .login-form {
-  padding: 0 1.5rem 1.75rem;
+  padding: 0 2rem 2.5rem;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1.25rem;
 }
 
-.login-form__error {
-  margin: 0;
-  padding: 0.65rem 0.85rem;
-  font-size: 0.875rem;
-  color: #dc2626;
-  background: rgba(239, 68, 68, 0.1);
-  border: 1px solid rgba(239, 68, 68, 0.25);
-  border-radius: var(--radius-md);
-}
-
-.field {
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-}
-
-.field__label {
-  font-size: 0.8125rem;
-  font-weight: 600;
-  color: var(--text-h);
-}
+.field { display: flex; flex-direction: column; gap: 0.4rem; }
+.field__label { font-size: 0.8125rem; font-weight: 600; color: #1e2937; }
 
 .field__input {
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  padding: 0.65rem 0.85rem;
-  font: inherit;
-  font-size: 0.9375rem;
-  color: var(--text-h);
-  background: var(--bg);
-  outline: none;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  font-size: 0.95rem;
+  background: white;
   text-align: right;
 }
 
-.field__input[dir='ltr'] {
-  text-align: left;
-}
+.field__input[dir='ltr'] { text-align: left; }
 
 .field__input:focus {
-  border-color: var(--accent-border);
-  box-shadow: 0 0 0 3px var(--accent-bg);
-}
-
-.field__input:disabled {
-  opacity: 0.6;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
 }
 
 .login-form__submit {
-  margin-top: 0.25rem;
-  border: none;
-  border-radius: var(--radius-md);
-  padding: 0.75rem 1rem;
-  font: inherit;
-  font-size: 0.9375rem;
+  background: #3b82f6;
+  color: white;
+  padding: 0.9rem;
+  font-size: 1rem;
   font-weight: 600;
-  color: #fff;
-  background: var(--accent);
+  border: none;
+  border-radius: 8px;
   cursor: pointer;
-  transition: opacity 0.2s;
+  margin-top: 0.5rem;
 }
 
-.login-form__submit:hover:not(:disabled) {
-  opacity: 0.92;
-}
+.login-form__submit:hover:not(:disabled) { background: #2563eb; }
+.login-form__submit:disabled { opacity: 0.6; cursor: not-allowed; }
 
-.login-form__submit:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
+/* موبایل */
+@media (max-width: 1024px) {
+  .login-page {
+    flex-direction: column;
+    height: auto;
+  }
+  .login-page__illustration {
+    flex: none;
+    height: 45vh;
+  }
+  .illustration-image {
+    object-fit: contain;
+  }
 }
 </style>
