@@ -6,7 +6,6 @@ defineProps({
   currentUser: { type: String, default: '' },
 })
 
-defineEmits(['logout'])
 </script>
 
 <template>
@@ -19,22 +18,6 @@ defineEmits(['logout'])
       </div>
     </div>
 
-    <div class="header__actions">
-      <RouterLink class="header__link" :to="{ name: 'molds' }">
-        {{ fa.molds.header.title }}
-      </RouterLink>
-      <div v-if="currentUser" class="header__user">
-        <span class="header__user-label">{{ fa.header.loggedInAs }}</span>
-        <span class="header__user-name" dir="ltr">{{ currentUser }}</span>
-      </div>
-      <div class="header__badge">
-        <span class="header__count">{{ userCount }}</span>
-        <span class="header__label">{{ fa.header.users }}</span>
-      </div>
-      <button type="button" class="header__logout" @click="$emit('logout')">
-        {{ fa.header.logout }}
-      </button>
-    </div>
   </header>
 </template>
 
@@ -117,35 +100,6 @@ defineEmits(['logout'])
 .header__label {
   font-size: 0.75rem;
   color: var(--text-muted);
-}
-
-.header__logout {
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  padding: 0.5rem 0.85rem;
-  font: inherit;
-  font-size: 0.8125rem;
-  font-weight: 600;
-  color: var(--text-muted);
-  background: var(--surface);
-  cursor: pointer;
-  transition: background 0.15s, color 0.15s, border-color 0.15s;
-}
-
-.header__link {
-  text-decoration: none;
-}
-
-.header__link:hover {
-  color: var(--accent);
-  border-color: var(--accent-border);
-  background: var(--accent-bg);
-}
-
-.header__logout:hover {
-  color: #ef4444;
-  border-color: rgba(239, 68, 68, 0.4);
-  background: rgba(239, 68, 68, 0.06);
 }
 
 @media (max-width: 640px) {
