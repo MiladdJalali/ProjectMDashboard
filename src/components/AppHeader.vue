@@ -2,19 +2,22 @@
 import { fa } from '../locales/fa'
 
 defineProps({
-  userCount: { type: Number, required: true },
+  userCount: { type: Number, default: 0 },
   currentUser: { type: String, default: '' },
+  title: { type: String, default: '' },
+  subtitle: { type: String, default: '' }
 })
 
+defineEmits(['logout'])
 </script>
 
 <template>
   <header class="header">
     <div class="header__brand">
-      <span class="header__logo" aria-hidden="true">👥</span>
+      <span class="header__logo" aria-hidden="true">M</span>
       <div>
-        <h1 class="header__title">{{ fa.header.title }}</h1>
-        <p class="header__subtitle">{{ fa.header.subtitle }}</p>
+        <h1 class="header__title">{{ title || fa.molds.header.title }}</h1>
+        <p class="header__subtitle">{{ subtitle || fa.molds.header.subtitle }}</p>
       </div>
     </div>
 
@@ -39,8 +42,14 @@ defineProps({
 }
 
 .header__logo {
-  font-size: 1.75rem;
-  line-height: 1;
+  width: 2.25rem;
+  height: 2.25rem;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-md);
+  color: #fff;
+  background: var(--accent);
+  font-weight: 800;
 }
 
 .header__title {
@@ -83,18 +92,17 @@ defineProps({
   display: flex;
   flex-direction: column;
   align-items: center;
+  min-width: 4rem;
   padding: 0.5rem 0.85rem;
   background: var(--accent-bg);
   border: 1px solid var(--accent-border);
   border-radius: var(--radius-md);
-  min-width: 4rem;
 }
 
 .header__count {
   font-size: 1.25rem;
   font-weight: 700;
   color: var(--accent);
-  line-height: 1.2;
 }
 
 .header__label {
@@ -102,14 +110,21 @@ defineProps({
   color: var(--text-muted);
 }
 
-@media (max-width: 640px) {
-  .header {
-    flex-direction: column;
-    align-items: stretch;
-  }
+.header__logout {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 0.5rem 0.85rem;
+  font: inherit;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: var(--surface);
+  cursor: pointer;
+}
 
-  .header__actions {
-    justify-content: space-between;
-  }
+.header__logout:hover {
+  color: var(--accent);
+  border-color: var(--accent-border);
+  background: var(--accent-bg);
 }
 </style>

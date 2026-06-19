@@ -126,6 +126,8 @@ function handleLogout() {
       <AppHeader
         :user-count="userCount"
         :current-user="currentUser"
+        title="مدیریت کاربران"
+        subtitle="ایجاد، ویرایش و حذف کاربران"
         @logout="handleLogout"
       />
 
@@ -212,12 +214,10 @@ function handleLogout() {
 .app {
   position: relative;
   min-height: 100svh;
+  padding: 1rem 0.75rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  padding: 2rem 1rem;
-  box-sizing: border-box;
 }
 
 .app__bg {
@@ -232,31 +232,28 @@ function handleLogout() {
 
 .app__card {
   width: 100%;
-  max-width: 1200px;
+  max-width: 96%;
+  margin: 0 auto;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow-lg);
   overflow: hidden;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
-.app__status {
+.app__status,
+.app__empty {
+  padding: 3rem 1.5rem;
   text-align: center;
-  padding: 2.5rem 1.5rem;
-  color: var(--text-muted);
-  border-top: 1px solid var(--border);
+  flex: 1;
 }
 
 .app__status--error p {
   margin: 0 0 0.75rem;
   color: #dc2626;
-}
-
-.app__empty {
-  text-align: center;
-  padding: 3rem 1.5rem;
-  color: var(--text-muted);
-  border-top: 1px solid var(--border);
 }
 
 .app__empty-icon {
@@ -364,7 +361,7 @@ function handleLogout() {
 
 .table-footer {
   display: flex;
-  justify-content: space-between; /* یکی راست، یکی چپ */
+  justify-content: space-between;
   align-items: center;
   padding: 1rem 1.5rem;
   border-top: 1px solid var(--border);

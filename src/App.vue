@@ -1,9 +1,8 @@
 <template>
   <div class="app-layout">
-    <!-- سایدبار فقط برای صفحات بعد از لاگین نمایش داده شود -->
     <Sidebar v-if="showSidebar" />
 
-    <!-- محتوای اصلی -->
+  
     <main class="app-content" :class="{ 'full-width': !showSidebar }">
       <RouterView />
     </main>
@@ -17,7 +16,6 @@ import { computed } from 'vue'
 
 const route = useRoute()
 
-// سایدبار را فقط وقتی نشون بده که مسیر لاگین نباشد
 const showSidebar = computed(() => {
   return route.path !== '/login' && route.path !== '/login/'
 })
@@ -48,7 +46,6 @@ body, html {
   flex-direction: column;
 }
 
-/* وقتی سایدبار نیست، محتوا تمام صفحه را بگیرد */
 .app-content.full-width {
   width: 100%;
   margin: 0;

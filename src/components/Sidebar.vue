@@ -1,6 +1,5 @@
 <template>
   <aside class="sidebar">
-    <!-- Header -->
     <div class="sidebar__header">
       <div class="logo-container">
         <span class="sidebar__logo">⚡</span>
@@ -8,19 +7,18 @@
       </div>
     </div>
 
-    <!-- Navigation -->
     <nav class="sidebar__nav">
       <ul>
         <li>
-          <router-link to="/" class="sidebar__link active">
+          <router-link to="/" class="sidebar__link">
             <span class="sidebar__icon">👤</span>
             <span>کاربران سیستم</span>
           </router-link>
         </li>
         <li>
-          <router-link to="/products" class="sidebar__link">
+          <router-link to="/molds" class="sidebar__link">
             <span class="sidebar__icon">📦</span>
-            <span>محصولات</span>
+            <span>قالب ها</span>
           </router-link>
         </li>
         <li>
@@ -32,7 +30,6 @@
       </ul>
     </nav>
 
-    <!-- User Section - Improved -->
     <div class="sidebar-footer">
       <div class="user-section">
         <div class="user-avatar">
@@ -137,7 +134,8 @@ const handleLogout = async () => {
   transform: translateX(-4px);
 }
 
-.sidebar__link.active {
+/* اینجا تغییر کرده است */
+.sidebar__link.router-link-exact-active {
   background: #3b82f6;
   color: white;
   box-shadow: 0 4px 8px -2px rgba(59, 130, 246, 0.4);
@@ -148,7 +146,7 @@ const handleLogout = async () => {
   width: 26px;
 }
 
-/* User Section - Improved */
+/* User Section */
 .sidebar-footer {
   padding: 1.25rem;
   background: #1a2330;
