@@ -22,6 +22,12 @@
           </router-link>
         </li>
         <li>
+          <router-link to="/products" class="sidebar__link">
+            <span class="sidebar__icon">🏭</span>
+            <span>محصولات</span>
+          </router-link>
+        </li>
+        <li>
           <router-link to="/settings" class="sidebar__link">
             <span class="sidebar__icon">⚙️</span>
             <span>تنظیمات</span>
