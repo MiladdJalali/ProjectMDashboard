@@ -12,6 +12,7 @@
  * @property {string} name
  * @property {number} code
  * @property {string} [description]
+ * @property {string} [imageUrl]
  * @property {PartRequest[]} parts
  */
 
@@ -30,6 +31,7 @@
  * @property {string} name
  * @property {number} code
  * @property {string} description
+ * @property {string} [imageUrl]
  * @property {string} creator
  * @property {string} updater
  * @property {string} created
@@ -60,6 +62,7 @@
  * @property {string} name
  * @property {string|number} code
  * @property {string} description
+ * @property {string} imageUrl
  * @property {PartForm[]} parts
  */
 
@@ -78,6 +81,7 @@ export function emptyProductForm() {
     name: '',
     code: '',
     description: '',
+    imageUrl: '',
     parts: [emptyPartForm()],
   }
 }

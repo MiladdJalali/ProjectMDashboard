@@ -45,9 +45,12 @@ async function parseError(response) {
 
 export async function apiRequest(path, options = {}) {
   const { auth = true, ...fetchOptions } = options
+  
+  const isFormData = fetchOptions.body instanceof FormData
+  
   const headers = {
     Accept: 'application/json',
-    ...(fetchOptions.body ? { 'Content-Type': 'application/json' } : {}),
+    ...(fetchOptions.body && !isFormData ? { 'Content-Type': 'application/json' } : {}),
     ...fetchOptions.headers,
   }
 

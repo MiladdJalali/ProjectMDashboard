@@ -5,6 +5,7 @@ import {
   createProduct as apiCreateProduct,
   updateProduct as apiUpdateProduct,
   deleteProduct as apiDeleteProduct,
+  uploadProductImage,
   toProductRequest,
 } from '../api/products'
 import { ApiError, clearToken } from '../api/client'
@@ -87,29 +88,61 @@ export function useProducts() {
   }
 
   async function createProduct(form) {
-    try {
-      const payload = toProductRequest(form)
-      const created = await apiCreateProduct(payload)
-      await loadProducts()
-      return { ok: true, product: created }
+    try {      
+      console.log("=== Starting Product Creation ===");
+      
+      if (form.imageFile) {
+        console.log("Uploading image...");
+        const uploadResult = await uploadProductImage(form.imageFile);
+        console.log("Image uploaded successfully:", uploadResult);
+        form.imageUrl = uploadResult.imageUrl;
+      } else {
+        console.log("No image to upload");
+      }
+      
+      const payload = toProductRequest(form);
+      console.log("Sending product payload:", payload);
+      
+      const created = await apiCreateProduct(payload);
+      console.log("Product created successfully:", created);
+      
+      await loadProducts();
+      return { ok: true, product: created };
     } catch (err) {
+      console.error("=== Create Product Error ===", err);
       return {
         ok: false,
         error: err instanceof ApiError ? err.message : 'ایجاد محصول ناموفق بود.',
-      }
+      };
     }
   }
 
   async function updateProduct(id, form) {
     try {
+      console.log("=== Starting Product Update ===");
+
+      if (form.imageFile) {
+        console.log("Uploading new image for update...");
+        const uploadResult = await uploadProductImage(form.imageFile)
+        console.log("Image uploaded successfully for update:", uploadResult);
+        form.imageUrl = uploadResult.imageUrl
+      } else {
+        console.log("No new image to upload. Using existing image URL:", form.imageUrl);
+      }
+    
       const payload = toProductRequest(form)
+      console.log("Sending updated product payload:", payload);
+
       await apiUpdateProduct(id, payload)
+      console.log("Product updated successfully!");
+
       await loadProducts()
       return { ok: true }
     } catch (err) {
+      console.error("=== Update Product Error ===", err);
       return {
         ok: false,
-        error: err instanceof ApiError ? err.message : 'ویرایش محصول ناموفق بود.',
+        error: err.message || 'ویرایش محصول ناموفق بود.',
       }
     }
   }

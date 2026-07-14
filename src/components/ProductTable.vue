@@ -1,6 +1,7 @@
 <script setup>
 import { fa, formatDate } from '../locales/fa'
 import BaseTable from './BaseTable.vue'
+import { API_ROOT } from '../api/client' 
 
 defineProps({
   products: { type: Array, required: true },
@@ -9,6 +10,7 @@ defineProps({
 defineEmits(['edit', 'delete'])
 
 const columns = [
+  { key: 'image', label: 'تصویر' },
   { key: 'code', label: 'کد محصول' },
   { key: 'name', label: 'نام محصول' },
   { key: 'description', label: 'توضیحات' },
@@ -18,6 +20,12 @@ const columns = [
   { key: 'updated', label: 'آخرین ویرایش' },
   { key: 'actions', label: 'عملیات', headerClass: 'actions-col' },
 ]
+
+function getImageUrl(url) {
+  if (!url) return ''
+  if (url.startsWith('http')) return url
+  return `${API_ROOT}${url}`
+}
 
 function display(value) {
   return value == null || value === '' ? '—' : value
@@ -34,6 +42,19 @@ function partsSummary(parts) {
 
 <template>
   <BaseTable :items="products" :columns="columns">
+    <template #image="{ item }">
+      <div class="table-img-wrapper">
+        <img 
+          v-if="item.imageUrl" 
+          :src="getImageUrl(item.imageUrl)" 
+          class="table-thumb" 
+          alt="thumb" 
+          @error="$event.target.style.display='none'" 
+        />
+        <span v-else class="table-thumb-empty">—</span>
+      </div>
+    </template>
+
     <template #code="{ item }">
       <span class="code-badge">{{ display(item.code) }}</span>
     </template>
@@ -157,5 +178,24 @@ function partsSummary(parts) {
 
 .delete-btn:hover {
   background: #b91c1c;
+}
+
+.table-img-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.table-thumb {
+  width: 40px;
+  height: 40px;
+  border-radius: 6px;
+  object-fit: cover;
+  border: 1px solid #334155;
+}
+
+.table-thumb-empty {
+  color: #64748b;
+  font-size: 0.9rem;
+  padding-right: 10px;
 }
 </style>

@@ -36,6 +36,18 @@ export async function fetchProducts(params = {}) {
   }
 }
 
+export async function uploadProductImage(file) {
+  const formData = new FormData()
+  formData.append('file', file)
+
+  const data = await apiRequest('/Media/upload', {
+    method: 'POST',
+    body: formData,
+  })
+  
+  return data
+}
+
 export async function createProduct(payload) {
   const data = await apiRequest('/Products', {
     method: 'POST',
@@ -83,6 +95,7 @@ export function toProductRequest(form) {
     name: form.name.trim(),
     code: Number(form.code),
     description: form.description?.trim() || undefined,
+    imageUrl: form.imageUrl || undefined,
     parts: (form.parts || []).map(toPartRequest),
   }
 }

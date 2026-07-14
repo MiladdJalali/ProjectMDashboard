@@ -14,6 +14,10 @@ const emit = defineEmits(['close', 'save'])
 
 const form = ref(emptyProductForm())
 const error = ref('')
+
+const selectedFile = ref(null)
+const imagePreview = ref('')
+
 const isEditing = computed(() => !!props.product)
 const title = computed(() =>
   isEditing.value ? fa.products.modal.editTitle : fa.products.modal.addTitle,
@@ -27,20 +31,27 @@ watch(
   () => {
     if (!props.open) return
     error.value = ''
-    form.value = props.product
-      ? {
-          name: props.product.name || '',
-          code: props.product.code ?? '',
-          description: props.product.description || '',
-          parts: (props.product.parts || []).map((part) => ({
-            id: part.id,
-            name: part.name || '',
-            code: part.code ?? '',
-            description: part.description || '',
-            moldIds: Array.isArray(part.moldIds) ? [...part.moldIds] : [],
-          })),
-        }
-      : emptyProductForm()
+    selectedFile.value = null
+    
+    if (props.product) {
+      form.value = {
+        name: props.product.name || '',
+        code: props.product.code ?? '',
+        description: props.product.description || '',
+        imageUrl: props.product.imageUrl || '',
+        parts: (props.product.parts || []).map((part) => ({
+          id: part.id,
+          name: part.name || '',
+          code: part.code ?? '',
+          description: part.description || '',
+          moldIds: Array.isArray(part.moldIds) ? [...part.moldIds] : [],
+        })),
+      }
+      imagePreview.value = props.product.imageUrl || ''
+    } else {
+      form.value = emptyProductForm()
+      imagePreview.value = ''
+    }
   },
   { immediate: true },
 )
@@ -61,6 +72,14 @@ function removePart(index) {
 
 function updatePart(index, part) {
   form.value.parts = form.value.parts.map((p, i) => (i === index ? part : p))
+}
+
+function onFileChange(e) {
+  const file = e.target.files[0]
+  if (!file) return
+
+  selectedFile.value = file
+  imagePreview.value = URL.createObjectURL(file)
 }
 
 function submit() {
@@ -91,7 +110,11 @@ function submit() {
     }
   }
 
-  emit('save', { ...form.value, parts: form.value.parts.map((p) => ({ ...p })) })
+  emit('save', { 
+    ...form.value, 
+    imageFile: selectedFile.value,
+    parts: form.value.parts.map((p) => ({ ...p })) 
+  })
 }
 
 function onBackdropClick(e) {
@@ -134,11 +157,23 @@ function onBackdropClick(e) {
               <input v-model="form.name" class="field__input" type="text" required />
             </label>
 
-            <div class="field-grid">
+            <div class="field-grid align-end">
               <label class="field">
                 <span class="field__label">{{ fa.products.fields.code }}</span>
                 <input v-model="form.code" class="field__input" type="number" required />
               </label>
+
+              <div class="field flex-row">
+                <label class="field flex-1">
+                  <span class="field__label">تصویر محصول</span>
+                  <input class="field__input file-input" type="file" accept="image/*" @change="onFileChange" />
+                </label>
+                
+                <div class="image-preview-zone">
+                  <img v-if="imagePreview" :src="imagePreview" alt="Preview" class="preview-img" />
+                  <span v-else class="preview-placeholder">بدون تصویر</span>
+                </div>
+              </div>
             </div>
 
             <label class="field">
@@ -256,10 +291,23 @@ function onBackdropClick(e) {
   gap: 0.75rem;
 }
 
+.align-end {
+  align-items: flex-end;
+}
+
 .field {
   display: flex;
   flex-direction: column;
   gap: 0.35rem;
+}
+
+.flex-row {
+  flex-direction: row;
+  gap: 0.5rem;
+}
+
+.flex-1 {
+  flex: 1;
 }
 
 .field__label {
@@ -283,6 +331,38 @@ function onBackdropClick(e) {
 .field__input:focus {
   border-color: var(--accent-border);
   box-shadow: 0 0 0 3px var(--accent-bg);
+}
+
+.file-input {
+  padding: 0.45rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.image-preview-zone {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg);
+  height: 42px;
+  width: 42px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.preview-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.preview-placeholder {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  text-align: center;
+  line-height: 1;
 }
 
 .field__textarea {
