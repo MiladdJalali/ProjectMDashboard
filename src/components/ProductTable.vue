@@ -7,54 +7,25 @@ defineProps({
   products: { type: Array, required: true },
 })
 
-defineEmits(['edit', 'delete'])
+defineEmits(['edit', 'delete', 'view'])
 
 const columns = [
-  { key: 'image', label: 'تصویر' },
   { key: 'code', label: 'کد محصول' },
   { key: 'name', label: 'نام محصول' },
   { key: 'description', label: 'توضیحات' },
-  { key: 'parts', label: 'قطعات' },
   { key: 'creator', label: 'ایجادکننده' },
   { key: 'created', label: 'تاریخ ایجاد' },
   { key: 'updated', label: 'آخرین ویرایش' },
   { key: 'actions', label: 'عملیات', headerClass: 'actions-col' },
 ]
 
-function getImageUrl(url) {
-  if (!url) return ''
-  if (url.startsWith('http')) return url
-  return `${API_ROOT}${url}`
-}
-
 function display(value) {
   return value == null || value === '' ? '—' : value
-}
-
-function partsSummary(parts) {
-  if (!parts?.length) return '—'
-  const names = parts.map((p) => p.name).filter(Boolean)
-  if (!names.length) return `${parts.length} قطعه`
-  const preview = names.slice(0, 3).join('، ')
-  return names.length > 3 ? `${preview} و ${names.length - 3} مورد دیگر` : preview
 }
 </script>
 
 <template>
   <BaseTable :items="products" :columns="columns">
-    <template #image="{ item }">
-      <div class="table-img-wrapper">
-        <img 
-          v-if="item.imageUrl" 
-          :src="getImageUrl(item.imageUrl)" 
-          class="table-thumb" 
-          alt="thumb" 
-          @error="$event.target.style.display='none'" 
-        />
-        <span v-else class="table-thumb-empty">—</span>
-      </div>
-    </template>
-
     <template #code="{ item }">
       <span class="code-badge">{{ display(item.code) }}</span>
     </template>
@@ -66,13 +37,6 @@ function partsSummary(parts) {
     <template #description="{ item }">
       <span class="description" :title="display(item.description)">
         {{ display(item.description) }}
-      </span>
-    </template>
-
-    <template #parts="{ item }">
-      <span class="parts-badge">{{ item.parts?.length ?? 0 }}</span>
-      <span class="parts-summary" :title="partsSummary(item.parts)">
-        {{ partsSummary(item.parts) }}
       </span>
     </template>
 
@@ -89,7 +53,10 @@ function partsSummary(parts) {
     </template>
 
     <template #actions="{ item }">
-      <div class="actions">
+      <div class="actions">                
+        <button class="action-btn view-btn" @click="$emit('view', item)">
+          {{ fa.products.actions.view }}
+        </button>
         <button class="action-btn edit-btn" @click="$emit('edit', item)">
           {{ fa.products.actions.edit }}
         </button>
@@ -111,17 +78,6 @@ function partsSummary(parts) {
   font-weight: 600;
 }
 
-.parts-badge {
-  display: inline-block;
-  background: #1e3a5f;
-  color: #93c5fd;
-  padding: 0.2rem 0.5rem;
-  border-radius: 9999px;
-  font-size: 0.75rem;
-  font-weight: 700;
-  margin-left: 0.35rem;
-}
-
 .font-medium {
   font-weight: 600;
 }
@@ -134,17 +90,6 @@ function partsSummary(parts) {
   display: inline-block;
 }
 
-.parts-summary {
-  display: block;
-  max-width: 200px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  font-size: 0.85rem;
-  color: #94a3b8;
-  margin-top: 0.2rem;
-}
-
 .date {
   color: #cbd5e1;
 }
@@ -152,7 +97,7 @@ function partsSummary(parts) {
 .actions {
   display: flex;
   gap: 10px;
-  justify-content: flex-end;
+  justify-content: flex-start;
 }
 
 .action-btn {
@@ -162,6 +107,14 @@ function partsSummary(parts) {
   cursor: pointer;
   border: none;
   color: white;
+}
+
+.view-btn {
+  background: #0284c7;
+}
+
+.view-btn:hover {
+  background: #0369a1;
 }
 
 .edit-btn {
@@ -178,24 +131,5 @@ function partsSummary(parts) {
 
 .delete-btn:hover {
   background: #b91c1c;
-}
-
-.table-img-wrapper {
-  display: flex;
-  align-items: center;
-}
-
-.table-thumb {
-  width: 40px;
-  height: 40px;
-  border-radius: 6px;
-  object-fit: cover;
-  border: 1px solid #334155;
-}
-
-.table-thumb-empty {
-  color: #64748b;
-  font-size: 0.9rem;
-  padding-right: 10px;
 }
 </style>

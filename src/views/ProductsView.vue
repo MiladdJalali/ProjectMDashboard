@@ -5,6 +5,7 @@ import AppHeader from '../components/AppHeader.vue'
 import ProductToolbar from '../components/ProductToolbar.vue'
 import ProductTable from '../components/ProductTable.vue'
 import ProductFormModal from '../components/ProductFormModal.vue'
+import ProductDetailsModal from '../components/ProductDetailsModal.vue'
 import Pagination from '../components/Pagination.vue'
 import { useProducts } from '../composables/useProducts'
 import { useAuth } from '../composables/useAuth'
@@ -43,6 +44,9 @@ const paginatedProducts = computed(() => {
   const end = start + itemsPerPage.value
   return filteredProducts.value.slice(start, end)
 })
+
+const showDetailsModal = ref(false)
+const selectedProduct = ref(null)
 
 watch(search, () => {
   currentPage.value = 1
@@ -115,10 +119,16 @@ async function handleDelete() {
   deleteTarget.value = null
 }
 
+function openDetails(product) {
+  selectedProduct.value = product
+  showDetailsModal.value = true
+}
+
 function handleLogout() {
   logout()
   router.push({ name: 'login' })
 }
+
 </script>
 
 <template>
@@ -155,6 +165,13 @@ function handleLogout() {
         :products="paginatedProducts"
         @edit="openEdit"
         @delete="confirmDelete"
+        @view="openDetails"
+      />
+
+      <ProductDetailsModal 
+      :show="showDetailsModal"
+      :product="selectedProduct"
+      @close="showDetailsModal = false"    
       />
 
       <div v-if="!loading && !error && filteredProducts.length" class="table-footer">

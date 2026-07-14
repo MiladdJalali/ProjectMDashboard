@@ -186,6 +186,7 @@ export const fa = {
       actions: 'عملیات',
     },
     actions: {
+      view: 'جزئیات',
       edit: 'ویرایش',
       delete: 'حذف',
     },
