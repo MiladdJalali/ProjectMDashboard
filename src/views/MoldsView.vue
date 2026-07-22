@@ -2,9 +2,9 @@
 import { ref, computed, onMounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import AppHeader from '../components/AppHeader.vue'
-import MoldToolbar from '../components/MoldToolbar.vue'
-import MoldTable from '../components/MoldTable.vue'
-import MoldFormModal from '../components/MoldFormModal.vue'
+import MoldToolbar from '../components/Molds/MoldToolbar.vue'
+import MoldTable from '../components/Molds/MoldTable.vue'
+import MoldFormModal from '../components/Molds/MoldFormModal.vue'
 import Pagination from '../components/Pagination.vue'
 import { useMolds } from '../composables/useMolds'
 import { useAuth } from '../composables/useAuth'
@@ -35,7 +35,7 @@ const deleteError = ref('')
 
 // صفحه‌بندی
 const currentPage = ref(1)
-const itemsPerPage = ref(15) // عدد بزرگ‌تر برای پرتر شدن جدول
+const itemsPerPage = ref(15)
 
 const totalPages = computed(() => Math.ceil(filteredMolds.value.length / itemsPerPage.value))
 
@@ -169,8 +169,7 @@ function handleLogout() {
         <p v-else>هنوز قالبی ثبت نشده است</p>
       </div>
     </main>
-
-    <!-- Modal و Confirm بدون تغییر بماند -->
+    
     <MoldFormModal
       :open="modalOpen"
       :mold="editingMold"
@@ -189,11 +188,25 @@ function handleLogout() {
           @click.self="cancelDelete"
         >
           <div class="confirm">
-            <!-- محتوای confirm بدون تغییر -->
+            <h3 class="confirm__title">حذف قالب</h3>
+            <p class="confirm__text">
+              آیا از حذف قالب <strong>{{ deleteTarget.name }}</strong> مطمئن هستید؟
+            </p>
+            <p v-if="deleteError" class="confirm__error" role="alert">{{ deleteError }}</p>
+            <div class="confirm__actions">
+              <button type="button" class="btn btn--ghost" @click="cancelDelete">
+                انصراف
+              </button>
+              <!-- این دکمه در کد قبلی شما وجود نداشت -->
+              <button type="button" class="btn btn--danger" @click="handleDelete">
+                حذف شود
+              </button>
+            </div>
           </div>
         </div>
       </Transition>
     </Teleport>
+
   </div>
 </template>
 
@@ -244,4 +257,45 @@ function handleLogout() {
   text-align: center;
   flex: 1;
 }
+
+.btn {
+  border: none;
+  border-radius: var(--radius-md);
+  padding: 0.6rem 1rem;
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.btn--ghost { background: transparent; color: var(--text-muted); }
+.btn--ghost:hover { background: var(--surface-hover); color: var(--text-h); }
+.btn--danger { background: #dc2626; color: #fff; }
+.btn--danger:hover { background: #b91c1c; }
+
+.confirm-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 110;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  background: rgba(15, 23, 42, 0.55);
+  backdrop-filter: blur(4px);
+}
+.confirm {
+  width: 100%;
+  max-width: 380px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-lg);
+}
+.confirm__title { margin: 0 0 0.5rem; font-size: 1.125rem; color: var(--text-h); }
+.confirm__text { margin: 0 0 1rem; font-size: 0.9375rem; color: var(--text-muted); }
+.confirm__error { margin: 0 0 1rem; font-size: 0.875rem; color: #dc2626; }
+.confirm__actions { display: flex; justify-content: flex-end; gap: 0.5rem; }
+
+.modal-enter-active, .modal-leave-active { transition: opacity 0.2s ease; }
+.modal-enter-from, .modal-leave-to { opacity: 0; }
 </style>

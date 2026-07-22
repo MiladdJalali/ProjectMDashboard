@@ -1,7 +1,7 @@
 <script setup>
-import { fa, formatDate } from '../locales/fa'
-import BaseTable from './BaseTable.vue'
-import { API_ROOT } from '../api/client' 
+import { fa, formatDate } from '../../locales/fa.js'
+import BaseTable from '../BaseTable.vue'
+import { API_ROOT } from '../../api/client.js' 
 
 defineProps({
   products: { type: Array, required: true },
@@ -70,7 +70,6 @@ function display(value) {
 
 <style scoped>
 .code-badge {
-  background: #334155;
   color: #60a5fa;
   padding: 0.35rem 0.75rem;
   border-radius: 9999px;
@@ -97,7 +96,7 @@ function display(value) {
 .actions {
   display: flex;
   gap: 10px;
-  justify-content: flex-start;
+  justify-content: center;
 }
 
 .action-btn {

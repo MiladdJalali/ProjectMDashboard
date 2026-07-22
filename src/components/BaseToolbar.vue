@@ -50,9 +50,9 @@ defineExpose({ focusSearch: () => inputRef.value?.focus() })
   align-items: center;
   gap: 0.75rem;
   padding: 1.25rem 1.5rem;
-  background: #1e2937;
+  background: var(--surface);
   border-radius: 12px 12px 0 0;
-  border-bottom: 1px solid #334155;
+  border-bottom: 1px solid var(--border);
   flex-wrap: wrap;
 }
 
@@ -62,14 +62,14 @@ defineExpose({ focusSearch: () => inputRef.value?.focus() })
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  background: #253549;
-  border: 1px solid #475569;
+  background: var(--surface-hover);
+  border: 1px solid var(--border);
   border-radius: 12px;
   padding: 0 0.85rem;
 }
 
 .toolbar__search-icon {
-  color: #94a3b8;
+  color: var(--text-muted);
   font-size: 1.1rem;
 }
 
@@ -79,7 +79,7 @@ defineExpose({ focusSearch: () => inputRef.value?.focus() })
   background: transparent;
   font: inherit;
   font-size: 0.95rem;
-  color: #e2e8f0;
+  color: var(--text-h);
   padding: 0.65rem 0;
   outline: none;
 }
@@ -101,13 +101,12 @@ defineExpose({ focusSearch: () => inputRef.value?.focus() })
   transform: translateY(-1px);
 }
 
-/* استایل‌هایی که روی کلاس‌های داخل Slot اعمال می‌شوند */
 :slotted(.toolbar__select),
 :slotted(.toolbar__small-input) {
-  background: #253549;
-  border: 1px solid #475569;
+  background: var(--surface-hover);
+  border: 1px solid var(--border);
   border-radius: 12px;
-  color: #e2e8f0;
+  color: var(--text-h);
   padding: 0.65rem 0.85rem;
   font-size: 0.9rem;
 }
@@ -120,13 +119,13 @@ defineExpose({ focusSearch: () => inputRef.value?.focus() })
   cursor: pointer;
   white-space: nowrap;
   transition: all 0.2s;
-  background: #334155;
-  color: #e2e8f0;
-  border: 1px solid #475569;
+  background: var(--surface-hover);
+  color: var(--text-h);
+  border: 1px solid var(--border);
 }
 
 :slotted(.toolbar__ghost:hover) {
-  background: #475569;
-  color: white;
+  background: var(--border);
+  color: var(--text-h);
 }
 </style>

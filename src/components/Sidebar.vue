@@ -10,9 +10,9 @@
     <nav class="sidebar__nav">
       <ul>
         <li>
-          <router-link to="/" class="sidebar__link">
-            <span class="sidebar__icon">👤</span>
-            <span>کاربران سیستم</span>
+          <router-link to="/products" class="sidebar__link">
+            <span class="sidebar__icon">🏭</span>
+            <span>محصولات</span>
           </router-link>
         </li>
         <li>
@@ -22,9 +22,9 @@
           </router-link>
         </li>
         <li>
-          <router-link to="/products" class="sidebar__link">
-            <span class="sidebar__icon">🏭</span>
-            <span>محصولات</span>
+          <router-link to="/" class="sidebar__link">
+            <span class="sidebar__icon">👤</span>
+            <span>کاربران سیستم</span>
           </router-link>
         </li>
         <li>
@@ -72,19 +72,19 @@ const handleLogout = async () => {
 .sidebar {
   width: 280px;
   height: 100vh;
-  background: #1e2937;
-  border-left: 1px solid #334155;
+  background: var(--surface); /* تغییر کرد */
+  border-left: 1px solid var(--border); /* تغییر کرد */
   display: flex;
   flex-direction: column;
-  color: #e2e8f0;
-  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.4);
+  color: var(--text-muted); /* تغییر کرد */
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1); /* سایه ملایم‌تر شد */
   flex-shrink: 0;
 }
 
 /* Header */
 .sidebar__header {
   padding: 1.8rem 1.25rem;
-  border-bottom: 1px solid #334155;
+  border-bottom: 1px solid var(--border); /* تغییر کرد */
 }
 
 .logo-container {
@@ -104,7 +104,7 @@ const handleLogout = async () => {
   margin: 0;
   font-size: 1.3rem;
   font-weight: 700;
-  color: white;
+  color: var(--text-h); /* تغییر کرد */
 }
 
 /* Navigation */
@@ -128,22 +128,21 @@ const handleLogout = async () => {
   gap: 14px;
   padding: 0.85rem 1.1rem;
   text-decoration: none;
-  color: #cbd5e1;
+  color: var(--text-muted);
   border-radius: 10px;
   font-size: 0.96rem;
   transition: all 0.2s ease;
 }
 
 .sidebar__link:hover {
-  background: #334155;
-  color: white;
+  background: var(--surface-hover);
+  color: var(--text-h);
   transform: translateX(-4px);
 }
 
-/* اینجا تغییر کرده است */
 .sidebar__link.router-link-exact-active {
   background: #3b82f6;
-  color: white;
+  color: white; 
   box-shadow: 0 4px 8px -2px rgba(59, 130, 246, 0.4);
 }
 
@@ -152,11 +151,10 @@ const handleLogout = async () => {
   width: 26px;
 }
 
-/* User Section */
 .sidebar-footer {
   padding: 1.25rem;
-  background: #1a2330;
-  border-top: 1px solid #334155;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
 }
 
 .user-section {
@@ -165,7 +163,7 @@ const handleLogout = async () => {
   gap: 14px;
   padding-bottom: 1rem;
   margin-bottom: 1rem;
-  border-bottom: 1px solid #334155;
+  border-bottom: 1px solid var(--border);
 }
 
 .user-avatar {
@@ -178,7 +176,7 @@ const handleLogout = async () => {
   justify-content: center;
   font-size: 1.4rem;
   flex-shrink: 0;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 }
 
 .user-info {
@@ -188,21 +186,21 @@ const handleLogout = async () => {
 .user-name {
   display: block;
   font-weight: 600;
-  color: #f1f5f9;
+  color: var(--text-h);
   font-size: 1rem;
 }
 
 .user-role {
   font-size: 0.82rem;
-  color: #94a3b8;
+  color: var(--text-muted);
 }
 
 /* Logout Button */
 .logout-btn {
   width: 100%;
   padding: 0.85rem;
-  background: #b91c1c;
-  color: #fecaca;
+  background: #dc2626;
+  color: #fff;
   border: none;
   border-radius: 10px;
   font-weight: 500;
@@ -216,7 +214,7 @@ const handleLogout = async () => {
 }
 
 .logout-btn:hover {
-  background: #991b1b;
+  background: #b91c1c;
   color: white;
   transform: translateY(-2px);
 }

@@ -1,6 +1,6 @@
 <script setup>
-import { fa } from '../locales/fa'
-import BaseToolbar from './BaseToolbar.vue'
+import { fa } from '../../locales/fa.js'
+import BaseToolbar from '../BaseToolbar.vue'
 
 const search = defineModel('search', { type: String, default: '' })
 const filters = defineModel('filters', {
@@ -67,18 +67,18 @@ function resetFilters() {
 
 <style scoped>
 .toolbar__input-sm {
-  border: 1px solid #334155;
+  border: 1px solid var(--border);
   border-radius: 8px;
   padding: 0.5rem 0.75rem;
   font: inherit;
   font-size: 0.85rem;
-  background: #1e2937;
-  color: #e2e8f0;
+  background: var(--surface-hover);
+  color: var(--text-h);
   min-width: 120px;
 }
 
 .toolbar__input-sm::placeholder {
-  color: #94a3b8;
+  color: var(--text-muted);
 }
 
 .toolbar__input-sm:focus {
@@ -87,19 +87,19 @@ function resetFilters() {
 }
 
 .toolbar__ghost {
-  border: 1px solid #475569;
+  border: 1px solid var(--border);
   border-radius: 8px;
   padding: 0.5rem 0.85rem;
   font: inherit;
   font-size: 0.85rem;
   font-weight: 600;
   background: transparent;
-  color: #cbd5e1;
+  color: var(--text-muted);
   cursor: pointer;
 }
 
 .toolbar__ghost:hover {
-  background: #334155;
-  color: #fff;
+  background: var(--surface-hover);
+  color: var(--text-h);
 }
 </style>

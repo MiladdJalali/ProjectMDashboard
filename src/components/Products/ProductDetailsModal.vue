@@ -1,6 +1,6 @@
 <script setup>
 import { computed } from 'vue'
-import { API_ROOT } from '../api/client'
+import { API_ROOT } from '../../api/client'
 
 const props = defineProps({
   show: Boolean,

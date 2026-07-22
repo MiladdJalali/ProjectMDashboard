@@ -1,6 +1,6 @@
 <script setup>
-import { fa, formatDate } from '../locales/fa'
-import BaseTable from './BaseTable.vue'
+import { fa, formatDate } from '../../locales/fa.js'
+import BaseTable from '../BaseTable.vue'
 
 defineProps({
   molds: { type: Array, required: true },
@@ -8,7 +8,6 @@ defineProps({
 
 defineEmits(['edit', 'delete'])
 
-// تعریف ستون‌ها و هدرها
 const columns = [
   { key: 'code', label: 'کد قالب' },
   { key: 'name', label: 'نام قالب' },
@@ -89,7 +88,6 @@ function translatedLocation(value) {
 
 <style scoped>
 .code-badge {
-  background: #334155;
   color: #60a5fa;
   padding: 0.35rem 0.75rem;
   border-radius: 9999px;
@@ -102,8 +100,8 @@ function translatedLocation(value) {
   font-size: 0.85rem;
   font-weight: 600;
 }
-.status-badge.active { background: #166534; color: #4ade80; }
-.status-badge:not(.active) { background: #78350f; color: #fbbf24; }
+.status-badge.active { color: #4ade80; }
+.status-badge:not(.active) { color: #fbbf24; }
 .font-medium { font-weight: 600; }
 .description {
   max-width: 320px;
@@ -115,7 +113,7 @@ function translatedLocation(value) {
 .muted { color: #94a3b8; font-size: 0.9rem; }
 .number-cell { direction: ltr; text-align: center; }
 .date { color: #cbd5e1; }
-.actions { display: flex; gap: 10px; justify-content: flex-end; }
+.actions { display: flex; gap: 10px; justify-content: center; }
 .action-btn { padding: 0.55rem 1.1rem; border-radius: 8px; font-size: 0.9rem; cursor: pointer; border: none; color: white; }
 .edit-btn { background: #475569; }
 .edit-btn:hover { background: #64748b; }

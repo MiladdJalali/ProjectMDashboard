@@ -1,6 +1,6 @@
 <script setup>
-import { fa } from '../locales/fa'
-import BaseToolbar from './BaseToolbar.vue'
+import { fa } from '../../locales/fa.js'
+import BaseToolbar from '../BaseToolbar.vue'
 
 const search = defineModel('search', { type: String, default: '' })
 const filters = defineModel('filters', {

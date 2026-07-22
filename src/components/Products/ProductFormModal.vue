@@ -1,8 +1,8 @@
 <script setup>
 import { ref, watch, computed } from 'vue'
-import PartEditor from './PartEditor.vue'
-import { emptyProductForm, emptyPartForm } from '../types/products'
-import { fa } from '../locales/fa'
+import PartEditor from '../PartEditor.vue'
+import { emptyProductForm, emptyPartForm } from '../../types/products.js'
+import { fa } from '../../locales/fa.js'
 
 const props = defineProps({
   open: { type: Boolean, default: false },

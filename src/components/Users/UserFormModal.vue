@@ -1,61 +1,40 @@
 <script setup>
 import { ref, watch, computed } from 'vue'
-import { fa } from '../locales/fa'
+import { fa, emptyUserForm } from '../../locales/fa'
 
 const props = defineProps({
   open: { type: Boolean, default: false },
-  mold: { type: Object, default: null },
+  user: { type: Object, default: null },
   serverError: { type: String, default: '' },
 })
 
 const emit = defineEmits(['close', 'save'])
 
-const emptyForm = () => ({
-  name: '',
-  code: '',
-  description: '',
-  shotCount: 0,
-  maxShotsBeforeMaintenance: '',
-  partNumber: '',
-  location: 0,
-  isActive: true,
-})
-
-const form = ref(emptyForm())
+const form = ref(emptyUserForm())
 const error = ref('')
-const isEditing = computed(() => !!props.mold)
+
+const isEditing = computed(() => !!props.user)
 const title = computed(() =>
-  isEditing.value ? fa.molds.modal.editTitle : fa.molds.modal.addTitle,
+  isEditing.value ? fa.modal.editTitle : fa.modal.addTitle,
 )
 const submitLabel = computed(() =>
-  isEditing.value ? fa.molds.modal.saveBtn : fa.molds.modal.createBtn,
+  isEditing.value ? fa.modal.saveBtn : fa.modal.createBtn,
 )
 
-function normalizeLocation(value) {
-  if (value === 'Warehouse') return 0
-  if (value === 'Production') return 1
-
-  const numberValue = Number(value ?? 0)
-  return Number.isNaN(numberValue) ? 0 : numberValue
-}
-
 watch(
-  () => [props.open, props.mold],
+  () => [props.open, props.user],
   () => {
     if (!props.open) return
     error.value = ''
-    form.value = props.mold
+    form.value = props.user
       ? {
-          name: props.mold.name || '',
-          code: props.mold.code ?? '',
-          description: props.mold.description || '',
-          shotCount: props.mold.shotCount ?? 0,
-          maxShotsBeforeMaintenance: props.mold.maxShotsBeforeMaintenance ?? '',
-          partNumber: props.mold.partNumber ?? '',
-          location: normalizeLocation(props.mold.location),
-          isActive: Boolean(props.mold.isActive),
+          username: props.user.username || '',
+          address: props.user.address || '',
+          description: props.user.description || '',
+          password: '',
+          confirmPassword: '',
         }
-      : emptyForm()
+      : emptyUserForm()
   },
   { immediate: true },
 )
@@ -68,12 +47,20 @@ function close() {
 function submit() {
   error.value = ''
 
-  if (!form.value.name.trim()) {
-    error.value = fa.molds.modal.errors.nameRequired
+  if (!form.value.username.trim()) {
+    error.value = fa.modal.errors.usernameRequired
     return
   }
-  if (form.value.code === '' || Number.isNaN(Number(form.value.code))) {
-    error.value = fa.molds.modal.errors.codeRequired
+  if (!form.value.password) {
+    error.value = fa.modal.errors.passwordRequired
+    return
+  }
+  if (!form.value.confirmPassword) {
+    error.value = fa.modal.errors.confirmRequired
+    return
+  }
+  if (form.value.password !== form.value.confirmPassword) {
+    error.value = fa.modal.errors.passwordMismatch
     return
   }
 
@@ -100,8 +87,13 @@ function onBackdropClick(e) {
         <form class="modal" @submit.prevent="submit">
           <div class="modal__header">
             <h2 class="modal__title">{{ title }}</h2>
-            <button type="button" class="modal__close" :aria-label="fa.molds.modal.close" @click="close">
-              x
+            <button
+              type="button"
+              class="modal__close"
+              :aria-label="fa.modal.close"
+              @click="close"
+            >
+              ×
             </button>
           </div>
 
@@ -111,63 +103,75 @@ function onBackdropClick(e) {
             </p>
 
             <label class="field">
-              <span class="field__label">{{ fa.molds.fields.name }}</span>
-              <input v-model="form.name" class="field__input" type="text" required />
+              <span class="field__label">{{ fa.modal.username }}</span>
+              <input
+                v-model="form.username"
+                type="text"
+                class="field__input"
+                :placeholder="fa.modal.usernamePlaceholder"
+                autocomplete="username"
+                dir="ltr"
+                :disabled="isEditing"
+                required
+              />
             </label>
-
-            <div class="field-grid">
-              <label class="field">
-                <span class="field__label">{{ fa.molds.fields.code }}</span>
-                <input v-model="form.code" class="field__input" type="number" required />
-              </label>
-
-              <label class="field">
-                <span class="field__label">{{ fa.molds.fields.partNumber }}</span>
-                <input v-model="form.partNumber" class="field__input" type="number" />
-              </label>
-            </div>
 
             <label class="field">
-              <span class="field__label">{{ fa.molds.fields.description }}</span>
-              <textarea v-model="form.description" class="field__input field__textarea" rows="2" />
+              <span class="field__label">
+                {{ fa.modal.address }}
+                <span class="field__optional">{{ fa.modal.optional }}</span>
+              </span>
+              <input
+                v-model="form.address"
+                type="text"
+                class="field__input"
+                :placeholder="fa.modal.addressPlaceholder"
+              />
             </label>
 
-            <div class="field-grid">
-              <label class="field">
-                <span class="field__label">{{ fa.molds.fields.shotCount }}</span>
-                <input v-model="form.shotCount" class="field__input" type="number" min="0" />
-              </label>
+            <label class="field">
+              <span class="field__label">
+                {{ fa.modal.description }}
+                <span class="field__optional">{{ fa.modal.optional }}</span>
+              </span>
+              <textarea
+                v-model="form.description"
+                class="field__input field__textarea"
+                :placeholder="fa.modal.descriptionPlaceholder"
+                rows="2"
+              />
+            </label>
 
-              <label class="field">
-                <span class="field__label">{{ fa.molds.fields.maxShotsBeforeMaintenance }}</span>
-                <input
-                  v-model="form.maxShotsBeforeMaintenance"
-                  class="field__input"
-                  type="number"
-                  min="0"
-                />
-              </label>
-            </div>
+            <label class="field">
+              <span class="field__label">{{ fa.modal.password }}</span>
+              <input
+                v-model="form.password"
+                type="password"
+                class="field__input"
+                :placeholder="fa.modal.passwordPlaceholder"
+                autocomplete="new-password"
+                dir="ltr"
+                required
+              />
+            </label>
 
-            <div class="field-grid">
-              <label class="field">
-                <span class="field__label">{{ fa.molds.fields.location }}</span>
-                <select v-model="form.location" class="field__input">
-                  <option :value="0">{{ fa.molds.locationValues['0'] }}</option>
-                  <option :value="1">{{ fa.molds.locationValues['1'] }}</option>
-                </select>
-              </label>
-
-              <label class="check">
-                <input v-model="form.isActive" type="checkbox" />
-                <span>{{ fa.molds.fields.isActive }}</span>
-              </label>
-            </div>
+            <label class="field">
+              <span class="field__label">{{ fa.modal.confirmPassword }}</span>
+              <input
+                v-model="form.confirmPassword"
+                type="password"
+                class="field__input"
+                :placeholder="fa.modal.passwordPlaceholder"
+                autocomplete="new-password"
+                dir="ltr"
+                required
+              />
+            </label>
           </div>
 
           <div class="modal__footer">
             <button type="button" class="btn btn--ghost" @click="close">
-              {{ fa.molds.modal.cancel }}
+              {{ fa.modal.cancel }}
             </button>
             <button type="submit" class="btn btn--primary">{{ submitLabel }}</button>
           </div>
@@ -191,7 +195,7 @@ function onBackdropClick(e) {
 
 .modal {
   width: 100%;
-  max-width: 520px;
+  max-width: 440px;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-xl);
@@ -210,7 +214,7 @@ function onBackdropClick(e) {
 .modal__title {
   margin: 0;
   font-size: 1.125rem;
-  font-weight: 700;
+  font-weight: 600;
   color: var(--text-h);
 }
 
@@ -220,9 +224,11 @@ function onBackdropClick(e) {
   width: 2rem;
   height: 2rem;
   border-radius: var(--radius-sm);
-  font-size: 1.2rem;
+  font-size: 1.4rem;
+  line-height: 1;
   color: var(--text-muted);
   cursor: pointer;
+  transition: background 0.15s, color 0.15s;
 }
 
 .modal__close:hover {
@@ -249,12 +255,6 @@ function onBackdropClick(e) {
   border-radius: var(--radius-md);
 }
 
-.field-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.75rem;
-}
-
 .field {
   display: flex;
   flex-direction: column;
@@ -267,6 +267,11 @@ function onBackdropClick(e) {
   color: var(--text-h);
 }
 
+.field__optional {
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
 .field__input {
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
@@ -276,7 +281,12 @@ function onBackdropClick(e) {
   color: var(--text-h);
   background: var(--bg);
   outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
   text-align: right;
+}
+
+.field__input[dir='ltr'] {
+  text-align: left;
 }
 
 .field__input:focus {
@@ -284,26 +294,14 @@ function onBackdropClick(e) {
   box-shadow: 0 0 0 3px var(--accent-bg);
 }
 
+.field__input:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
 .field__textarea {
   resize: vertical;
   min-height: 4rem;
-}
-
-.check {
-  align-self: end;
-  min-height: 2.7rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  color: var(--text-h);
-  font-size: 0.875rem;
-  font-weight: 600;
-}
-
-.check input {
-  width: 1rem;
-  height: 1rem;
-  accent-color: var(--accent);
 }
 
 .modal__footer {
@@ -322,6 +320,7 @@ function onBackdropClick(e) {
   font-size: 0.875rem;
   font-weight: 600;
   cursor: pointer;
+  transition: opacity 0.2s, background 0.15s;
 }
 
 .btn--ghost {
@@ -348,14 +347,18 @@ function onBackdropClick(e) {
   transition: opacity 0.2s ease;
 }
 
+.modal-enter-active .modal,
+.modal-leave-active .modal {
+  transition: transform 0.2s ease;
+}
+
 .modal-enter-from,
 .modal-leave-to {
   opacity: 0;
 }
 
-@media (max-width: 560px) {
-  .field-grid {
-    grid-template-columns: 1fr;
-  }
+.modal-enter-from .modal,
+.modal-leave-to .modal {
+  transform: scale(0.96) translateY(8px);
 }
 </style>

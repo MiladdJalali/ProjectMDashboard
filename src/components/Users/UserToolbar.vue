@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from 'vue'
-import { fa } from '../locales/fa'
-import BaseToolbar from './BaseToolbar.vue'
+import { fa } from '../../locales/fa.js'
+import BaseToolbar from '../BaseToolbar.vue'
 
 const search = defineModel({ type: String, default: '' })
 const emit = defineEmits(['add'])

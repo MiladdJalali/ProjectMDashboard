@@ -1,8 +1,6 @@
 <script setup>
 defineProps({
-  // داده‌های جدول (آرایه‌ای از آبجکت‌ها)
   items: { type: Array, required: true },
-  // آرایه ستون‌ها: [{ key: 'username', label: 'نام کاربری' }]
   columns: { type: Array, required: true }
 })
 </script>
@@ -33,7 +31,7 @@ defineProps({
 <style scoped>
 .table-container {
   width: 100%;
-  background: #1e2937;
+  background: var(--surface);
   overflow: hidden;
   border-radius: 0 0 12px 12px;
 }
@@ -44,22 +42,29 @@ defineProps({
 }
 
 .data-table th {
-  background: #253549;
+  background: var(--surface-hover);
   padding: 1.25rem 1.5rem;
-  text-align: right;
-  color: #94a3b8;
+   text-align: center;
+  color: var(--text-muted);
   font-weight: 600;
   white-space: nowrap;
 }
 
+@media (prefers-color-scheme: light) {
+  .data-table th {
+    background: #f1f5f9;
+  }
+}
+
 .data-table td {
   padding: 1.3rem 1.5rem;
-  border-bottom: 1px solid #334155;
-  color: #e2e8f0;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-h);
   vertical-align: middle;
+  text-align: center;
 }
 
 .table-row:hover {
-  background: #27344f;
+  background: var(--surface-hover);
 }
 </style>

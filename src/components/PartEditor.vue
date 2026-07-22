@@ -1,7 +1,6 @@
 <script setup>
 import { computed } from 'vue'
-import MoldMultiSelect from './MoldMultiSelect.vue'
-import { fa } from '../locales/fa'
+import MoldMultiSelect from './Molds/MoldMultiSelect.vue'
 
 const props = defineProps({
   modelValue: { type: Object, required: true },

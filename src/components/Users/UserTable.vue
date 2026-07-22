@@ -1,6 +1,6 @@
 <script setup>
-import { fa, formatDate } from '../locales/fa'
-import BaseTable from './BaseTable.vue'
+import { fa, formatDate } from '../../locales/fa.js'
+import BaseTable from '../BaseTable.vue'
 
 defineProps({
   users: { type: Array, required: true },
@@ -43,7 +43,6 @@ const columns = [
 </template>
 
 <style scoped>
-/* استایل‌های اختصاصی جدول یوزر */
 .user-name { font-weight: 600; }
 .description {
   max-width: 380px;
@@ -52,7 +51,7 @@ const columns = [
   text-overflow: ellipsis;
   display: inline-block;
 }
-.actions { display: flex; gap: 10px; }
+.actions { display: flex; gap: 10px; justify-content: center; }
 .action-btn { padding: 0.55rem 1.1rem; border-radius: 8px; font-size: 0.9rem; cursor: pointer; border: none; color: white; }
 .edit-btn { background: #475569; }
 .edit-btn:hover { background: #64748b; }

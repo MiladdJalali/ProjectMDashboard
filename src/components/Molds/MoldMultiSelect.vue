@@ -1,7 +1,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { fetchMolds } from '../api/molds'
-import { fa } from '../locales/fa'
+import { fetchMolds } from '../../api/molds'
+import { fa } from '../../locales/fa'
 
 const props = defineProps({
   modelValue: { type: Array, default: () => [] },

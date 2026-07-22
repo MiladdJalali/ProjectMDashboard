@@ -14,7 +14,6 @@ defineEmits(['logout'])
 <template>
   <header class="header">
     <div class="header__brand">
-      <span class="header__logo" aria-hidden="true">M</span>
       <div>
         <h1 class="header__title">{{ title || fa.molds.header.title }}</h1>
         <p class="header__subtitle">{{ subtitle || fa.molds.header.subtitle }}</p>
